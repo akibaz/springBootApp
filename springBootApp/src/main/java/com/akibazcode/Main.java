@@ -3,15 +3,41 @@ package com.akibazcode;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @SpringBootApplication
 public class Main {
+    private static final List<Customer> customers;
+
+    // Create primitive DB
+    static {
+        customers = new ArrayList<>();
+        Customer baki = new Customer(
+                1,
+                "Baki",
+                "baki@gmail.com",
+                34
+        );
+        Customer maki = new Customer(
+                2,
+                "Maki",
+                "maki@gmail.com",
+                33
+        );
+        customers.add(baki);
+        customers.add(maki);
+    }
+
     public static void main(String[] args) {
+        System.out.println(customers); // Test the DB
         SpringApplication.run(Main.class, args);
     }
 
-    class Customer {
+
+    // TODO: Move this class to appropriate package
+    static class  Customer {
         private Integer id;
         private String name;
         private String email;
