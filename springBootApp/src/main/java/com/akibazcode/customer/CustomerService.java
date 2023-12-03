@@ -1,5 +1,6 @@
 package com.akibazcode.customer;
 
+import com.akibazcode.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class CustomerService {
     public Customer getCustomerById(Integer customerId) {
         Optional<Customer> customerOptional = customerDao.selectCustomerById(customerId);
         return customerOptional.orElseThrow(
-                () -> new IllegalArgumentException(
+                () -> new ResourceNotFoundException(
                         "Customer with id: [%s] not found.".formatted(customerId)
                 )
         );
