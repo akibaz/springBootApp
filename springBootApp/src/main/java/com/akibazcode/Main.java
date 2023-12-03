@@ -2,9 +2,7 @@ package com.akibazcode;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +37,26 @@ public class Main {
         SpringApplication.run(Main.class, args);
     }
 
-    @RequestMapping(
-            path = "api/v1/customers",
-            method = RequestMethod.GET
-    ) // TODO: Replace with @GetMapping annotation
+    // REST API for getting all customers
+    @GetMapping("api/v1/customers")
     public List<Customer> getCustomers() {
         return customers;
+    }
+
+    // REST API for getting customer by id
+    @GetMapping("api/v1/customers/{customerId}")
+    public Customer getCustomerById(
+            @PathVariable(name = "customerId") Integer customerId
+    ) {
+        Customer customerResult = customers.stream()
+                .filter(customer -> customer.getId().equals(customerId))
+                .findFirst()
+                .orElseThrow(
+                        () -> new IllegalArgumentException(
+                                "Customer with id [%s] not found.".formatted(customerId)
+                        )
+                );
+        return customerResult;
     }
 
 
