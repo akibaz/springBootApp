@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Repository("fakeDB") // Creates repository bean
-public class CustomerDataAccessService implements CustomerDao {
+@Repository("list") // Creates repository bean
+public class CustomerListDataAccessService implements CustomerDao {
     private static final List<Customer> customers;
 
      static {
