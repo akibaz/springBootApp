@@ -1,3 +1,21 @@
 server:
   error:
     include-message: always
+
+spring:
+  main:
+    web-application-type: servlet
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/customer
+    username: akibaz
+    password: password
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: false
