@@ -42,4 +42,12 @@ public class CustomerController {
     public void deleteCustomerById(@PathVariable("customerId") Integer customerId) {
         customerService.deleteCustomerById(customerId);
     }
+
+    // REST API for updating customer
+    @PutMapping("{customerId}")
+    public void updateCustomer(
+            @PathVariable("customerId") Integer customerId,
+            @RequestBody CustomerUpdateRequest customerUpdateRequest) {
+        customerService.updateCustomer(customerId, customerUpdateRequest);
+    }
 }
