@@ -14,7 +14,7 @@ public class CustomerService {
     private final CustomerDao customerDao;
 
     @Autowired
-    public CustomerService(@Qualifier("jpa") CustomerDao customerDao) {
+    public CustomerService(@Qualifier("list") CustomerDao customerDao) {
         this.customerDao = customerDao;
     }
 
@@ -48,5 +48,17 @@ public class CustomerService {
         );
 
         customerDao.insertCustomer(customer);
+    }
+
+    public void deleteCustomerById(Integer customerId) {
+        // check whether customer with provided id exist
+        if (!customerDao.existsCustomerWithId(customerId)) {
+            throw new ResourceNotFoundException(
+                    "Customer with id: [%s] not found.".formatted(customerId)
+            );
+        }
+
+        // delete customer
+        customerDao.deleteCustomerById(customerId);
     }
 }

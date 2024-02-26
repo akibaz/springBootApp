@@ -36,4 +36,10 @@ public class CustomerController {
     public void registerCustomer(@RequestBody CustomerRegistrationRequest customerRegistrationRequest) {
         customerService.addCustomer(customerRegistrationRequest);
     }
+
+    // REST API for deleting customer by id
+    @DeleteMapping("{customerId}")
+    public void deleteCustomerById(@PathVariable("customerId") Integer customerId) {
+        customerService.deleteCustomerById(customerId);
+    }
 }
