@@ -8,18 +8,19 @@ import java.util.Optional;
 
 @Repository("list") // Creates repository bean
 public class CustomerListDataAccessService implements CustomerDao {
-    private static final List<Customer> customers;
+    private final List<Customer> customers;
+    private Integer index = 1;
 
-     static {
+    {
         customers = new ArrayList<>();
         Customer baki = new Customer(
-                1,
+                index++,
                 "Baki",
                 "baki@gmail.com",
                 34
         );
         Customer maki = new Customer(
-                2,
+                index++,
                 "Maki",
                 "maki@gmail.com",
                 33
@@ -38,5 +39,17 @@ public class CustomerListDataAccessService implements CustomerDao {
         return customers.stream()
                 .filter(customer -> customer.getId().equals(customerId))
                 .findFirst();
+    }
+
+    @Override
+    public void insertCustomer(Customer customer) {
+        customer.setId(index++);
+        customers.add(customer);
+    }
+
+    @Override
+    public boolean existsCustomerWithEmail(String email) {
+        return customers.stream()
+                .anyMatch(customer -> customer.getEmail().equals(email));
     }
 }

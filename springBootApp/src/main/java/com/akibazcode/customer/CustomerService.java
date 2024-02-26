@@ -1,5 +1,6 @@
 package com.akibazcode.customer;
 
+import com.akibazcode.exception.DuplicateResourceException;
 import com.akibazcode.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,11 +23,30 @@ public class CustomerService {
     }
 
     public Customer getCustomerById(Integer customerId) {
-        Optional<Customer> customerOptional = customerDao.selectCustomerById(customerId);
-        return customerOptional.orElseThrow(
-                () -> new ResourceNotFoundException(
-                        "Customer with id: [%s] not found.".formatted(customerId)
-                )
+        Customer customer = customerDao.selectCustomerById(customerId)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                "Customer with id: [%s] not found.".formatted(customerId)
+                        )
+                );
+        return customer;
+    }
+
+    public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest) {
+        // check if email is already taken
+        if (customerDao.existsCustomerWithEmail(customerRegistrationRequest.email())) {
+            throw new DuplicateResourceException(
+                    "Email already taken."
+            );
+        }
+
+        // add customer
+        Customer customer = new Customer(
+                customerRegistrationRequest.name(),
+                customerRegistrationRequest.email(),
+                customerRegistrationRequest.age()
         );
+
+        customerDao.insertCustomer(customer);
     }
 }

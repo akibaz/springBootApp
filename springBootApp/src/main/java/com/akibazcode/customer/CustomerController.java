@@ -1,13 +1,12 @@
 package com.akibazcode.customer;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController  // Create web controller with json response body
+@RequestMapping("api/v1/customers")
 public class CustomerController {
     private final CustomerService customerService;
 
@@ -18,17 +17,23 @@ public class CustomerController {
 
 
     // REST API for getting all customers
-    @GetMapping("api/v1/customers")
+    @GetMapping
     public List<Customer> getCustomers() {
         return customerService.getAllCustomers();
     }
 
 
     // REST API for getting customer by id
-    @GetMapping("api/v1/customers/{customerId}")
+    @GetMapping("{customerId}")
     public Customer getCustomerById(
             @PathVariable(name = "customerId") Integer customerId
     ) {
         return customerService.getCustomerById(customerId);
+    }
+
+    // REST API for posting new customer
+    @PostMapping
+    public void registerCustomer(@RequestBody CustomerRegistrationRequest customerRegistrationRequest) {
+        customerService.addCustomer(customerRegistrationRequest);
     }
 }
