@@ -2,12 +2,15 @@ package com.akibazcode;
 
 import com.akibazcode.customer.Customer;
 import com.akibazcode.customer.CustomerRepository;
+import com.github.javafaker.Faker;
+import com.github.javafaker.Name;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.List;
+import java.util.Random;
 
 @SpringBootApplication
 public class Main {
@@ -18,11 +21,18 @@ public class Main {
     @Bean
     CommandLineRunner runner(CustomerRepository customerRepository) {
         return args -> {
-            List<Customer> customers = List.of(
-                    new Customer("Baki", "baki@gmail.com", 34),
-                    new Customer("Maki", "maki@gmail.com", 33)
+            Faker faker = new Faker();
+            Random random = new Random();
+            Name name = faker.name();
+            String firstName = name.firstName();
+            String lastName = name.lastName();
+
+            Customer customer = new Customer(
+                    firstName + " " + lastName,
+                    firstName.toLowerCase() + "." + lastName.toLowerCase() + "@akibaz.com",
+                    random.nextInt(16, 99)
             );
-            customerRepository.saveAll(customers);
+            customerRepository.save(customer);
         };
     }
 }
