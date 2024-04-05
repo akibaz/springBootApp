@@ -1,6 +1,7 @@
 package com.akibazcode.customer;
 
 import com.akibazcode.AbstractTestcontainers;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -49,11 +50,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
                 20
         );
         underTest.insertCustomer(customer);
-        Integer id = underTest.selectAllCustomers().stream()
-                .filter(c -> c.getEmail().equals(email))
-                .map(Customer::getId)
-                .findFirst()
-                .orElseThrow();
+        Integer id = getCustomerId(email);
 
         // When
         Optional<Customer> actual = underTest.selectCustomerById(id);
@@ -141,11 +138,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
                 20
         );
         underTest.insertCustomer(customer);
-        Integer expectedId = underTest.selectAllCustomers().stream()
-                .filter(c -> c.getEmail().equals(email))
-                .map(Customer::getId)
-                .findFirst()
-                .orElseThrow();
+        Integer expectedId = getCustomerId(email);
 
         // When
         boolean actual = underTest.existsCustomerWithId(expectedId);
@@ -174,11 +167,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
                 20
         );
         underTest.insertCustomer(customer);
-        Integer customerId = underTest.selectAllCustomers().stream()
-                .filter(c -> c.getEmail().equals(email))
-                .map(Customer::getId)
-                .findFirst()
-                .orElseThrow();
+        Integer customerId = getCustomerId(email);
         // When
         underTest.deleteCustomerById(customerId);
         //Then
@@ -196,11 +185,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
                 20
         );
         underTest.insertCustomer(customer);
-        Integer customerId = underTest.selectAllCustomers().stream()
-                .filter(c -> c.getEmail().equals(email))
-                .map(Customer::getId)
-                .findFirst()
-                .orElseThrow();
+        Integer customerId = getCustomerId(email);
         // When
         Customer updatedCustomer = new Customer(
                 customerId,
@@ -226,11 +211,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
                 20
         );
         underTest.insertCustomer(customer);
-        Integer customerId = underTest.selectAllCustomers().stream()
-                .filter(c -> c.getEmail().equals(email))
-                .map(Customer::getId)
-                .findFirst()
-                .orElseThrow();
+        Integer customerId = getCustomerId(email);
         String newName = "foo";
 
         // When
@@ -263,11 +244,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
                 20
         );
         underTest.insertCustomer(customer);
-        Integer customerId = underTest.selectAllCustomers().stream()
-                .filter(c -> c.getEmail().equals(email))
-                .map(Customer::getId)
-                .findFirst()
-                .orElseThrow();
+        Integer customerId = getCustomerId(email);
         String newEmail = "foo@bar.com";
 
         // When
@@ -300,11 +277,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
                 20
         );
         underTest.insertCustomer(customer);
-        Integer customerId = underTest.selectAllCustomers().stream()
-                .filter(c -> c.getEmail().equals(email))
-                .map(Customer::getId)
-                .findFirst()
-                .orElseThrow();
+        Integer customerId = getCustomerId(email);
         int newAge = 11;
 
         // When
@@ -337,11 +310,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
                 20
         );
         underTest.insertCustomer(customer);
-        Integer customerId = underTest.selectAllCustomers().stream()
-                .filter(c -> c.getEmail().equals(email))
-                .map(Customer::getId)
-                .findFirst()
-                .orElseThrow();
+        Integer customerId = getCustomerId(email);
         int newAge = 11;
 
         // When
@@ -371,11 +340,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
                 age
         );
         underTest.insertCustomer(customer);
-        Integer customerId = underTest.selectAllCustomers().stream()
-                .filter(c -> c.getEmail().equals(email))
-                .map(Customer::getId)
-                .findFirst()
-                .orElseThrow();
+        Integer customerId = getCustomerId(email);
         int newAge = 11;
 
         // When
@@ -392,5 +357,15 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
         Optional<Customer> actualCustomer = underTest.selectCustomerById(customerId);
         customer.setId(customerId);
         assertThat(actualCustomer).isPresent().hasValue(customer);
+    }
+
+    @NotNull
+    private Integer getCustomerId(String email) {
+        Integer id = underTest.selectAllCustomers().stream()
+                .filter(c -> c.getEmail().equals(email))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow();
+        return id;
     }
 }
