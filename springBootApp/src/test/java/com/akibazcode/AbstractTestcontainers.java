@@ -31,7 +31,8 @@ public abstract class AbstractTestcontainers {
             new PostgreSQLContainer<>("postgres:latest")
                     .withDatabaseName("akibazcode-dao-unit-test")
                     .withUsername("akibaz")
-                    .withPassword("password");
+                    .withPassword("password")
+                    .withCommand("postgres -c max_connections=150");
 
     @DynamicPropertySource
     private static void registerDataSourceProperties(DynamicPropertyRegistry registry) {
